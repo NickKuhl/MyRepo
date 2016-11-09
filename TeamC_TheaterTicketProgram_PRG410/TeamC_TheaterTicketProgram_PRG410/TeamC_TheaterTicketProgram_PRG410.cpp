@@ -7,6 +7,7 @@ November 8, 2016
 Professor Gholam Ali Shaykhian
 
 This program allows the employees of a theater to process ticket sales, view available seating, and change ticket prices.
+The program gives the user seven main menu options, three of which have sub-menus.
 */
 
 #include "stdafx.h"
