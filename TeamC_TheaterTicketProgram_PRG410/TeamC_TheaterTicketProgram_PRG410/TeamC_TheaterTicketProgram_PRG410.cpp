@@ -3,7 +3,7 @@ Theater Ticket Program, Version 1.0
 Created by Team C:
 Nicholas Kuhl, Luke Nelson, Matthew Cain, & Matthew Schroeder
 PRG/410
-November 8, 2016
+November 10, 2016
 Professor Gholam Ali Shaykhian
 
 This program allows the employees of a theater to process ticket sales, view available seating, and change ticket prices.
@@ -16,6 +16,8 @@ The program gives the user seven main menu options, three of which have sub-menu
 #include <sstream>
 
 using namespace std;
+
+void displaySeatingChart(bool seating[10][9]);
 
 int main()
 {
@@ -37,9 +39,11 @@ int main()
 
 		int menuSelection;
 		cin >> menuSelection;
+		bool seatsAvailable[10][9];                        // Ten rows, nine columns, true = taken (default), false = available
+		double seatPrices[10][9];
 
 		switch (menuSelection) {
-			case 1:; break;
+			case 1: displaySeatingChart(seatsAvailable); break;
 			case 2:; break;
 			case 3:; break;
 			case 4:; break;
@@ -51,5 +55,40 @@ int main()
 	}
 
     return 0;
+}
+
+void displaySeatingChart(bool seating[10][9]) {
+	cout << "\n\nCurrent Seating:\n\n";
+	cout << "____________________________________________________\n";
+	cout << "|     | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 |\n";
+	cout << "|_____|____|____|____|____|____|____|____|____|____|\n";
+	for (int i = 0; i <= 8; i++) {
+		cout << "|  R" << i + 1 << " | ";
+		for (int j = 0; j <= 8; j++) {
+			if (seating[i][j] == true) {
+				cout << " O | ";
+			}
+			else {
+				cout << " X | ";
+			}
+		}
+		cout << "\n";
+		cout << "|_____|____|____|____|____|____|____|____|____|____|\n";
+	}
+	cout << "| R10 | ";
+	for (int j = 0; j <= 8; j++) {
+		if (seating[9][j] == true) {
+			cout << " O | ";
+		}
+		else {
+			cout << " X | ";
+		}
+	}
+	cout << "\n";
+	cout << "|_____|____|____|____|____|____|____|____|____|____|\n";
+	cout << "\n";
+	cout << "(Type 'c' + Enter to continue.)\n";
+	string response;
+	cin >> response;
 }
 
