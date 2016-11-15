@@ -20,21 +20,22 @@ using namespace std;
 void displaySeatingChart(bool seating[10][9]);
 void displayTicketPrices(double ticketPrices[10][9]);
 void displaySeatingByRow(bool seating[10][9]);
+void changeTicketPrices(double prices[10][9]);
 
 int main()
 {
-	cout << "Welcome to the Theater Ticket Program, Version 1.0\n\n";
+	cout << "\nWelcome to the Theater Ticket Program, Version 1.0\n\n";
 	cout << "Instructions:\n";
-	cout << "Please enter one of the following menu options, then press Enter.\n\n";
+	cout << "Please enter one of the following menu options, then press Enter.\n";
 
 	bool exitProgramFlag = false;
 
-	bool seatsTaken[10][9];                  // Ten rows, nine columns, true = taken, false = available (default)
+	bool seatsTaken[10][9]{};                  // Ten rows, nine columns, true = taken, false = available (default)
 	double seatPrices[10][9]{};
 
 	while (!exitProgramFlag) {
 
-		cout << "1) Display current seating chart\n";
+		cout << "\n1) Display current seating chart\n";
 		cout << "2) Display current ticket prices\n";
 		cout << "3) Purchase ticket/s\n";
 		cout << "4) Set ticket prices\n";
@@ -49,8 +50,8 @@ int main()
 		switch (menuSelection) {
 			case 1: displaySeatingChart(seatsTaken); break;
 			case 2: displayTicketPrices(seatPrices); break;
-			case 3:; break;
-			case 4:; break;
+			case 3: ; break;
+			case 4: changeTicketPrices(seatPrices); break;
 			case 5:; break;
 			case 6:; break;
 			case 7: displaySeatingByRow(seatsTaken); break;
@@ -63,6 +64,7 @@ int main()
 }
 
 void displaySeatingChart(bool seating[10][9]) {
+
 	cout << "\n\nCurrent Seating:\n\n";
 	cout << "____________________________________________________\n";
 	cout << "|     | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 |\n";
@@ -167,3 +169,22 @@ void displaySeatingByRow(bool seating[10][9]) {
 	cin >> response;
 }
 
+void changeTicketPrices(double tickets[10][9]) {
+	cout << "\nTicket prices are based on the value of the center-front seat (the base price).\n";
+	cout << "What do you want to change the base price to?\n\n";
+	cout << "(Current base price: " << tickets[1][5] << ")\n\n";
+	double newBasePrice;
+	cin >> newBasePrice;
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 9; j++) {
+			tickets[i][j] = newBasePrice - 0.03 * (i - 1) - 0.005 * -(j - 5);
+		}
+	}
+	cout << "\n\nNew base ticket price is set to " << newBasePrice << "\n\n";
+	cout << "View new price chart? [y/n]\n\n";
+	char response;
+	cin >> response;
+	if (response == 'y') {
+		displayTicketPrices(tickets);
+	}
+}
