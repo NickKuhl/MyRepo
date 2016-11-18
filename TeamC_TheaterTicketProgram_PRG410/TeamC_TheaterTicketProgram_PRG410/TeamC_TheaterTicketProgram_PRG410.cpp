@@ -14,12 +14,14 @@ The program gives the user seven main menu options, three of which have sub-menu
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 
 void displaySeatingChart(bool seating[10][9]);
 void displayTicketPrices(double ticketPrices[10][9]);
 void displaySeatingByRow(bool seating[10][9]);
+void displaySeatingTotals(bool seating[10][9]);
 void changeTicketPrices(double prices[10][9]);
 
 int main()
@@ -53,7 +55,7 @@ int main()
 			case 3: ; break;
 			case 4: changeTicketPrices(seatPrices); break;
 			case 5:; break;
-			case 6:; break;
+			case 6: displaySeatingTotals(seatsTaken); break;
 			case 7: displaySeatingByRow(seatsTaken); break;
 			case 8: exitProgramFlag = true; break;
 			default: cout << "\n\nSorry, that wasn't a valid menu selection. Please choose 1-8, then press Enter.\n\n";
@@ -101,22 +103,22 @@ void displaySeatingChart(bool seating[10][9]) {
 
 void displayTicketPrices(double ticketPrices[10][9]) {
 	cout << "\n\nCurrent Ticket Prices:\n\n";
-	cout << "_______________________________________________________________________________\n";
-	cout << "|     |   C1  |   C2  |   C3  |   C4  |   C5  |   C6  |   C7  |   C8  |   C9  |\n";
-	cout << "|_____|_______|_______|_______|_______|_______|_______|_______|_______|_______|\n";
+	cout << "______________________________________________________________________\n";
+	cout << "|     |  C1  |  C2  |  C3  |  C4  |  C5  |  C6  |  C7  |  C8  |  C9  |\n";
+	cout << "|_____|______|______|______|______|______|______|______|______|______|\n";
 	for (int i = 0; i <= 8; i++) {
-		cout << "|  R" << i << " | ";
+		cout << "|  R" << i << " |";
 		for (int j = 0; j <= 8; j++) {
-			cout << ticketPrices[i][j] << "|";
+			cout << setw(6) << ticketPrices[i][j] << "|";
 		}
-		cout << "\n|_____|_______|_______|_______|_______|_______|_______|_______|_______|_______|\n";
+		cout << "\n|_____|______|______|______|______|______|______|______|______|______|\n";
 		cout << "\n";
 	}
 	cout << "| R10 |";
 	for (int j = 0; j <= 8; j++) {
-		cout << ticketPrices[9][j] << "|";
+		cout << setw(6) << ticketPrices[9][j] << "|";
 	}
-	cout << "\n|_____|_______|_______|_______|_______|_______|_______|_______|_______|_______|\n";
+	cout << "\n|_____|______|______|______|______|______|______|______|______|______|\n";
 	cout << "\n";
 	cout << "\n";
 	cout << "(Type 'c' + Enter to continue.)\n";
@@ -187,4 +189,21 @@ void changeTicketPrices(double tickets[10][9]) {
 	if (response == 'y') {
 		displayTicketPrices(tickets);
 	}
+}
+
+void displaySeatingTotals(bool seating[10][9]) {
+	int seatsAvailable = 0;
+	int seatsTaken = 0;
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 9; j++) {
+			if (seating[i][j] == false) {
+				seatsAvailable++;
+			}
+			else if (seating[i][j] == true) {
+				seatsTaken++;
+			}
+		}
+	}
+	cout << "Total Seats Available: " << seatsAvailable << endl;
+	cout << "Total Seats Taken: " << seatsTaken << endl << endl;
 }
