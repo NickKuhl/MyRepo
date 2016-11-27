@@ -128,14 +128,13 @@ void displayTicketPrices(double ticketPrices[10][9]) {
 	// Outer loop prints row numbers for pricing chart.
 	for (int i = 0; i <= 8; i++) {
 
-		cout << "|  R" << i << " |";
+		cout << "|  R" << i + 1 << " |";
 
 		// Inner loop prints out a seat price in each column, formatted to the column width.
 		for (int j = 0; j <= 8; j++) {
 			cout << setw(6) << ticketPrices[i][j] << "|";
 		}
 		cout << "\n|_____|______|______|______|______|______|______|______|______|______|\n";
-		cout << "\n";
 	}
 	cout << "| R10 |";
 
@@ -159,7 +158,7 @@ void displaySeatingByRow(bool seating[10][9]) {
 	int sumAvailableByRow = 0;
 
 	// This loop increments the number of seats available in a selected row, in order to calculate the total available.
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 9; i++) {
 		if (seating[rowNumber - 1][i] == false) {
 			sumAvailableByRow++;
 		}
