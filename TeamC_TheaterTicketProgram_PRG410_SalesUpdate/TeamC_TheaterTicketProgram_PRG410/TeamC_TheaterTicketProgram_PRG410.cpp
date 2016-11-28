@@ -3,7 +3,7 @@ Theater Ticket Program, Version 1.0
 Created by Team C:
 Nicholas Kuhl, Luke Nelson, Matthew Cain, & Matthew Schroeder
 PRG/410
-November 10, 2016
+November 28th, 2016
 Professor Gholam Ali Shaykhian
 
 This program allows the employees of a theater to process ticket sales, view available seating, and change ticket prices.
@@ -23,8 +23,10 @@ void displayTicketPrices(double ticketPrices[10][9]);                     // Sho
 void displaySeatingByRow(bool seating[10][9]);                            // Shows seats available/taken for a specific row.
 void displaySeatingTotals(bool seating[10][9]);                           // Displays total seats available/taken.
 void changeTicketPrices(double prices[10][9]);                            // Lets user set ticket prices, using a base price.
-void displayTotalSales(bool seating[10][9], double ticketPrices[10][9]);  // Displays revenue for all tickets sold.
-void purchaseTickets(bool seating[10][9], double ticketPrices[10][9]);    // Lets user purchase tickets for selected seats.
+void displayTotalSales(double ticketSalesBySeat[10][9]);                  // Displays revenue for all tickets sold.
+
+// Lets user purchase tickets for selected seats.
+void purchaseTickets(bool seating[10][9], double ticketPrices[10][9], double ticketSalesBySeat[10][9]);
 
 int main()
 {
@@ -32,10 +34,11 @@ int main()
 	cout << "Instructions:\n";
 	cout << "Please enter one of the following menu options, then press Enter.\n";
 
-	bool exitProgramFlag = false;
+	bool exitProgramFlag = false;              // This is an option for when the user wants to quit the program
 
 	bool seatsTaken[10][9]{};                  // Ten rows, nine columns, true = taken, false = available (default)
 	double seatPrices[10][9]{};
+	double salesBySeat[10][9]{};               // Actual sales earned for each seat (because prices may change)
 
 	// These for loops iterate through the seatPrices array to set each seat's initial value to $5.00.
 	for (int i = 0; i < 10; i++) {
@@ -43,7 +46,7 @@ int main()
 			seatPrices[i][j] = 5.0;
 		}
 	}
-
+	//This is the start of the main loop showing the user the menu options and calling the functions for those options.
 	while (!exitProgramFlag) {
 
 		cout << "\n1) Display current seating chart\n";
@@ -55,18 +58,22 @@ int main()
 		cout << "7) Display seats available by row\n";
 		cout << "8) Exit program\n\n";
 
+		//This is so the switch statement will understand the user's choice
 		int menuSelection;
 		cin >> menuSelection;
 
+		// This begins the switch statement with the functions for each options
 		switch (menuSelection) {
 			case 1: displaySeatingChart(seatsTaken); break;
 			case 2: displayTicketPrices(seatPrices); break;
-			case 3: purchaseTickets(seatsTaken, seatPrices); break;
+			case 3: purchaseTickets(seatsTaken, seatPrices, salesBySeat); break;
 			case 4: changeTicketPrices(seatPrices); break;
-			case 5: displayTotalSales(seatsTaken,seatPrices); break;
+			case 5: displayTotalSales(salesBySeat); break;
 			case 6: displaySeatingTotals(seatsTaken); break;
 			case 7: displaySeatingByRow(seatsTaken); break;
 			case 8: exitProgramFlag = true; break;
+
+			// This is for when the user types in an invalid menu option.
 			default: cout << "\n\nSorry, that wasn't a valid menu selection. Please choose 1-8, then press Enter.\n\n";
 		}
 	}
@@ -239,27 +246,26 @@ void displaySeatingTotals(bool seating[10][9]) {
 			}
 		}
 	}
-	cout << "Total Seats Available: " << seatsAvailable << endl;
+	cout << "\nTotal Seats Available: " << seatsAvailable << endl;
 	cout << "Total Seats Taken: " << seatsTaken << endl << endl;
 }
 
 // This function displays revenue for all tickets sold.
-void displayTotalSales(bool seating[10][9], double ticketPrices[10][9]) {
+void displayTotalSales(double ticketSalesBySeat[10][9]) {
 
 	double totalSales = 0;
 
 	// These loops check which seats have been sold, then add up the prices for those seats to get a sales total.
 	for (int n = 0; n < 10; n++) {
 		for (int j = 0; j < 9; j++) {
-			if (seating[n][j] == true)
-				totalSales = totalSales + ticketPrices[n][j];
+				totalSales = totalSales + ticketSalesBySeat[n][j];
 		}
 	}
 	cout << "\nThe total sales so far are: $" << totalSales << endl << endl;
 }
 
 // This function lets user purchase tickets for selected seats.
-void purchaseTickets(bool seating[10][9], double ticketPrices[10][9]) {
+void purchaseTickets(bool seating[10][9], double ticketPrices[10][9], double ticketSalesBySeat[10][9]) {
 
 	bool processOrderFlag = true;                   // Flag or deciding whether to continue adding tickets to current order.
 	char yesOrNo = 'y';                             // Holds user input used to set exit flag value.
@@ -283,7 +289,12 @@ void purchaseTickets(bool seating[10][9], double ticketPrices[10][9]) {
 		// is also added to the current order total.
 		if (seating[ticketRow - 1][ticketColumn - 1] == false) {
 			seating[ticketRow - 1][ticketColumn - 1] = true;
+
+			// The order total is increased by the amount of the ticket being added to the order.
 			orderTotal += ticketPrices[ticketRow - 1][ticketColumn - 1];
+
+			// The total sales for the theater as a whole is updated by the amount of the ticket being sold (current price).
+			ticketSalesBySeat[ticketRow - 1][ticketColumn - 1] = ticketPrices[ticketRow - 1][ticketColumn - 1];
 			cout << "\n\nTicket for row " << ticketRow << ", column " << ticketColumn << " added to order.\n\n";
 			cout << "Would you like to purchase another ticket? [y/n]\n\n";
 			cin >> yesOrNo;
